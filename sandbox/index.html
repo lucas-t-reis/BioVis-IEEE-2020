@@ -5,16 +5,19 @@
 	<meta charset="UTF-8">
 	<link href="index.css" rel="stylesheet">
 	<script src="https://d3js.org/d3.v5.min.js"></script>
-	
+	<script src="../countSuicides.js"></script>
+
 	<title>D3 sandbox</title>
+	<style>
+		.bar{
+			fill: red;
+		}
+	</style>
 
 </head>
 
-	<body>
-	
-		<svg class="bar-chart" width="900" height="750"></svg>
-		<script src="../countSuicides.js"></script>
-
+	<body onload="countSuicides()">
+		<svg class="bar-chart" width="750" height="625"></svg>
 	</body>
 
 </html>

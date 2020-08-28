@@ -28,7 +28,7 @@ function countSuicides(){
 
 		xScale.domain(xdata.map(d => d));
 		yScale.domain([0, d3.max(ydata, d => d)]);
-		
+
 		g.append("g")
 			.attr("transform", "translate(0," + height + ")")
 			.call(d3.axisBottom(xScale));
