@@ -23,7 +23,7 @@ var svg = d3.select("body").append("svg")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-d3.csv("https://gist.githubusercontent.com/d3noob/7ac0cfe24fcaacaee04ccbca018a58a6/raw/a0840ad694b4794480ddeed24c956baceab10ba8/earthquakes.csv").then(function(data) {
+d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/sandbox/histogram/earthquake.csv?token=ADE4HTQCZ456WXOHJ7ALFF27K74VC").then(function(data) {
 
 	data.forEach(function(d) {
 		d.date = parseDate(d.dtg);
