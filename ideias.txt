@@ -1,1 +1,9 @@
 https://codepen.io/darsney/pen/OKZRgP
+
+02-09-2020:
+
+Usar um heatmap para representar familias com alto grau de suicidio
+Possivelmente usar um treemap para representar os atributos mais comums nos suicidios
+Tentar buscar mais de uma representacao para os graficos (enriquece o trabalho)
+No caso de heatmap, tomar cuidado se as familias tiverem pouca diferença (pois ai o grafico fica inutil)
+Usar grafico de eixos paralelos para representar os atributos mais comuns em suicidios por familia (esse grafico e' comum em machine learning)
