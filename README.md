@@ -24,7 +24,7 @@ Incluir dados faltantes no datasets? Caso dos 161x173 suicidios
 >AHABDJBCC
 >AAABBBCBA
 
-- [ ] Characterize (i.e, the relationship between cases and their attributes) suicide cases in families with high incidences of a given clinical attribute (such as depression)
+- [ ] Compare clinical information for suicide cases with their immediate relatives (siblings, parents, and children).
 
 >Explorar grafo e clicar no vertice mostra em comum
 
