@@ -1,6 +1,8 @@
+var radarChart
+
 function renderChart(attributes, families) {
     var ctx = document.getElementById("radarChart").getContext('2d');
-    var myChart = new Chart(ctx, {
+    radarChart = new Chart(ctx, {
         type: 'radar',
         data: {
             labels: attributes,
@@ -9,6 +11,14 @@ function renderChart(attributes, families) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            tooltips: {
+                enabled: true,
+                callbacks:{
+                    label: function (tooltipItems, data) {
+                        return  tooltipItems.yLabel.toFixed(2) + " %";
+                    }
+                }
+            },
         }
     });
 }
@@ -21,14 +31,15 @@ function processData(data){
         var familyAttributes = {}
         var familySuicideCont = {}
 
-        var color = ['red', 'green', 'blue', 'orange', 'purple', 'yellow', 'brown', 'lime', 'pink', 'cyan']
+        var color = []
 
         for(var i = 0; i < data.length; i++){
             familyAttributes[data[i].KindredID] = Array(attributes.length).fill(0)
             familySuicideCont[data[i].KindredID] = 0
         }
 
-        // console.log(data)
+        color = palette('mpn65', Object.keys(familyAttributes).length).map(function(hex){ return '#' + hex })
+        console.log(color)
 
         for(var i = 0; i < data.length; i++){
             for(var j = 0; j < attributes.length; j++){
