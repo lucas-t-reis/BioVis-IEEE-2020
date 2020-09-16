@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<meta charset="UTF-8">
+    <style>
+        .point {
+            mix-blend-mode: multiply;
+        }
+
+        .frame {
+            fill: none;
+            stroke: #000;
+        }
+
+        .axis text {
+            font: 10px sans-serif;
+        }
+
+        .axis line {
+            fill: none;
+            stroke: #ebebeb;
+        }
+
+        .axis circle {
+            fill: none;
+            stroke: #aaa;
+            //stroke-dasharray: 4;
+        }
+
+        .axis:last-of-type circle {
+            stroke: #333;
+            //stroke-dasharray: none;
+        }
+
+        .line {
+            fill: none;
+            stroke: orange;
+            stroke-width: 3px;
+        }
+    </style>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    
+	<title>D3 sandbox</title>
+
+</head>
+
+	<body>
+		<svg class="polar-chart" width="750" height="625"></svg>
+        <script src="./polar.js"></script>
+    </body>
+
+</html>
+
