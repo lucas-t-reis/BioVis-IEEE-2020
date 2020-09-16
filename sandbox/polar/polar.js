@@ -1,8 +1,77 @@
-function init(){
-    drawChart()
+var globalData
+var numCircles = 5
+
+processData(47434)
+
+//TODO:
+// Cores nas familias
+// Adicionar limite de similaridade
+
+function processData(id){
+    d3.csv("../../dataset/question3.csv").then(function(rows){
+        
+        var person, data = [], columns = rows.columns, level = 0, last = 0
+
+        for(var i = 0; i < rows.length; i++){
+            if(rows[i].personid == id){
+                person = rows[i];
+                break;
+            }
+        }
+
+        for(var i = 0; i < rows.length; i++){
+            
+            var commonAttr = 0, totalAttr = 0
+            data.push([0, 0, 5, rows[i].personid]);
+
+            for(var j in columns){
+                if(columns[j] == 'suicide' || columns[j] == 'Age')
+                    continue
+                else if(columns[j] == 'personid' || columns[j] == 'kindredId' || columns[j] == 'sex'){
+                    if(rows[i][columns[j]] == person[columns[j]])
+                        commonAttr++;
+                    totalAttr++;
+                }
+                else if(rows[i][columns[j]] == 'True'){
+                    if(person[columns[j]] == 'True')
+                        commonAttr++;
+                    totalAttr++;
+                }
+            }
+
+            data[i][1] = 1 - commonAttr/totalAttr
+        }
+
+        data.sort(function(a, b){ return a[1] - b[1]})
+
+        for(var i = 0; i < data.length; i++){
+            if(data[i][1] > level/numCircles){
+                
+                var deg = 2 * Math.PI/(i - last)
+                
+                for(var j = last + 1; j < i; j++)
+                    data[j][0] = data[j - 1][0] + deg 
+                
+                last = i
+                level++
+            }
+        }
+
+        var deg = 2 * Math.PI/(data.length - last)
+                
+        for(var j = last + 1; j < data.length; j++)
+            data[j][0] = data[j - 1][0] + deg 
+
+        //data = data.slice(0, last)
+        
+        console.log(data)
+
+        globalData = data
+        drawChart(data)
+    })
 }
 
-function drawChart(){
+function drawChart(data){
     
     var reMap = function(oldValue) {
         var oldMin = 0,
@@ -14,18 +83,6 @@ function drawChart(){
         return newValue;
         
     }
-  
-    var data = [
-    [reMap(25), 1, 10, 'label 1'],
-    [reMap(105), 0.8, 10, 'label 2'],
-    [reMap(266), 1, 10, 'label 3'],
-    [reMap(8), 0.2, 10, 'label 4'],
-    [reMap(189), 1, 10, 'label 5'],
-    [reMap(350), 0.6, 10, 'label 6'],
-    [reMap(119), 0.4, 10, 'label 7'],
-    [reMap(305), 0.8, 10, 'label 8'],
-    [reMap(0), 0, 10, 'center']
-    ];
   
     var zoom = d3.zoom()
         .scaleExtent([1, 10])
@@ -67,7 +124,7 @@ function drawChart(){
     var gr = svg.append('g')
         .attr('class', 'r axis')
         .selectAll('g')
-        .data(r.ticks(5).slice(1))
+        .data(r.ticks(numCircles).slice(1))
         .enter().append('g');
 
     gr.append('circle')
@@ -85,8 +142,6 @@ function drawChart(){
     ga.append('line')
         .attr('x2', radius);
     
-    var color = d3.schemeCategory10;
-
     var line = d3.lineRadial()
         .radius(function(d) {
             return r(d[1]);
@@ -117,28 +172,26 @@ function drawChart(){
       return d[2];
     })
     .attr('fill',function(d,i){
-      return color[i];
+      return 'red';
     }).on("click", function(d){
-      console.log(d);
+      //console.log(d);
       
       //return tooltip.style("visibility", "visible");
     });
   
   
   
-  // adding labels
-  svg.selectAll('point')
-    .data(data)
-    .enter().append("text")
-        .attr('transform', function(d) {
-      //console.log(d);
+//   // adding labels
+//   svg.selectAll('point')
+//     .data(data)
+//     .enter().append("text")
+//         .attr('transform', function(d) {
+//       //console.log(d);
   
-      var coors = line([d]).slice(1).slice(0, -1); // removes 'M' and 'Z' from string
-      return 'translate(' + coors + ')'
-    })
-        .text(function(d) {         
-          return d[3]; 
-        });   
+//       var coors = line([d]).slice(1).slice(0, -1); // removes 'M' and 'Z' from string
+//       return 'translate(' + coors + ')'
+//     })
+//         .text(function(d) {         
+//           return d[3]; 
+//         });   
 }
-
-init()
