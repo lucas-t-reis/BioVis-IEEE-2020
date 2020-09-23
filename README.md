@@ -1,6 +1,8 @@
 # BioVis-IEEE
 Data visualization project for the BioVis@IEEE Data Challenge
 
+# Modelo do PDF
+http://junctionpublishing.org/vgtc/Tasks/camera.html
 
 Incluir dados faltantes no datasets? Caso dos 161x173 suicidios
 # Questions to Answer
