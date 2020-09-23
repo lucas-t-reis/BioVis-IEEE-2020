@@ -66,6 +66,9 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 
 	// Getting dimensions for the various y axes
 	let dimensions = d3.keys(data[0]).filter(d => !skipAttributes.includes(d))
+	let color = d3.scaleOrdinal()
+		.domain([...families.keys()])
+		.range(d3.schemeCategory10) // Plugin in index.html provides this pallete
 	
 	
 	/* ---------- AXIS ---------- */ 
@@ -73,7 +76,7 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 	dimensions.forEach(function(attr) {
 		// One axis for each attribute, ranging from 0 to 100%
 		y[attr] = d3.scaleLinear()
-					.domain([0.0,0.5])
+					.domain([0.0,0.43])
 					.range([height, 0])
 	})
 	var x = d3.scalePoint()
@@ -88,19 +91,58 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 		)
 	}
 
+
+	/*---------- ON DEMAND HIGHLIGHT----------*/
+
+	var highlight = function(d) {
+
+		selected_family = d.id
+		console.log("Selecting to highlight:" + selected_family)
+
+		// Grey out all families
+		d3.selectAll(".line")
+			.transition().duration(200)
+			.style("stroke", "lightgrey")
+			.style("opacity", "0.20")
+
+		// Color the hovered one
+		d3.selectAll("." + "family_" + selected_family)
+			.transition().duration(200)
+			.style("stroke-width", "0.6%")
+			.style("stroke", color(selected_family))
+			.style("opacity", "1")
+
+	}
+
+	var noHighlight = function(d) {
+
+		d3.selectAll(".line")
+			.transition().duration(200).delay(500)
+			.style("stroke-width", "0.3%")
+			.style("stroke", d=>color(d.id))
+			.style("opacity", "1")
+	}
+
+
+	console.log(family_suicides)
 	// Drawing the lines
 	svg.selectAll("line_paths")
 		.data(family_suicides)
 		.enter().append("path")
+		.attr("class", d => "line " + "family_" + d.id) // CSS selector cant handle class id beginning with integer, hence family_+id
 		.attr("d", path)
 		.style("fill", "none")
-		.style("stroke", "#69b3a2")
-		.style("opacity", 0.5)
+		.style("stroke", d=>color(d.id))
+		.style("stroke-width", "0.3%")
+		.style("opacity", 1)
+		.on("mouseover", highlight)
+		.on("mouseleave", noHighlight)
 	
 	svg.selectAll("attr_axes")
 		.data(dimensions)
 		.enter()
 		.append("g")
+			.attr("class", "axis")
 			.attr("transform", d => "translate("+ x(d) + ")")
 			.each(function(d) {
 				d3.select(this)
