@@ -33,7 +33,7 @@ function processData(data){
 
         var color = []
 
-        for(var i = 0; i < data.length; i++){
+        for(var i = 0; i < data.length; i++){    
             familyAttributes[data[i].KindredID] = Array(attributes.length).fill(0)
             familySuicideCont[data[i].KindredID] = 0
         }
@@ -46,7 +46,7 @@ function processData(data){
                 if(data[i][attributes[j]] == 'True')
                     familyAttributes[data[i].KindredID][j]++;
             }
-            familySuicideCont[data[i].KindredID]++   
+            familySuicideCont[data[i].KindredID]++
         }
 
 
