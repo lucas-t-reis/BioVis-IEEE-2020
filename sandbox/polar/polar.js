@@ -1,16 +1,15 @@
 var globalData
 var numCircles = 5
 
-processData(47434)
+processData(47434, 0.05)
 
 //TODO:
-// Cores nas familias
 // Adicionar limite de similaridade
 
-function processData(id){
+function processData(id, limit){
     d3.csv("../../dataset/question3.csv").then(function(rows){
         
-        var person, data = [], columns = rows.columns, level = 0, last = 0
+        var person, data = [], columns = rows.columns
 
         for(var i = 0; i < rows.length; i++){
             if(rows[i].personid == id){
@@ -19,59 +18,93 @@ function processData(id){
             }
         }
 
+        console.log(person);
+
         for(var i = 0; i < rows.length; i++){
             
-            var commonAttr = 0, totalAttr = 0
-            data.push([0, 0, 5, rows[i].personid]);
+            var commonAttr = 0, totalAttr = 0, pos = data.length;
+            data.push([0, 0, 5, rows[i].personid, '#ff0000', [], []]);
 
             for(var j in columns){
                 if(columns[j] == 'suicide' || columns[j] == 'Age')
                     continue
-                else if(columns[j] == 'personid' || columns[j] == 'kindredId' || columns[j] == 'sex'){
-                    if(rows[i][columns[j]] == person[columns[j]])
+                else if(columns[j] == 'personid' || columns[j] == 'sex'){
+                    if(rows[i][columns[j]] == person[columns[j]]){
                         commonAttr++;
+                        data[pos][5].push(columns[j]);
+                    }
                     totalAttr++;
                 }
-                else if(rows[i][columns[j]] == 'True'){
-                    if(person[columns[j]] == 'True')
+                else if(rows[i][columns[j]] == 'True' || person[columns[j]] == 'True'){
+                    if(rows[i][columns[j]] == person[columns[j]]){
                         commonAttr++;
+                        data[pos][5].push(columns[j]);
+                    }
+                    else{
+                        data[pos][6].push(columns[j]);
+                    }
                     totalAttr++;
                 }
             }
 
-            data[i][1] = 1 - commonAttr/totalAttr
+            if(rows[i].KindredID == person.KindredID)
+                data[pos][4] = '#00dddd';
+            if(rows[i].personid == person.personid)
+                data[pos][4] = '#eeee00';
+
+            data[pos][1] = 1 - commonAttr/totalAttr
+
+            if(1 - data[pos][1] < limit)
+                data.pop()
         }
 
         data.sort(function(a, b){ return a[1] - b[1]})
 
-        for(var i = 0; i < data.length; i++){
-            if(data[i][1] > level/numCircles){
+        console.log(data)
+
+        var level = 0, idx = 0, levels = []
+
+        while(level <= numCircles){
+            
+            levels.push([])
+            
+            while(idx < data.length && data[idx][1] <= level/numCircles){
+                levels[level].push(idx)
+                idx++
+            }
+
+            level++
+        }
+
+        console.log(levels)
+
+        for(var i = 0; i <= numCircles; i++){
+            
+            if(levels[i].length == 0)
+                continue;
+            
+            var deg = 2 * Math.PI / levels[i].length
+
+            console.log(deg + ' ' + levels[i].length)
+
+            for(var j = 1; j < levels[i].length; j++){
                 
-                var deg = 2 * Math.PI/(i - last)
+                var now = levels[i][j], last = levels[i][j - 1]
                 
-                for(var j = last + 1; j < i; j++)
-                    data[j][0] = data[j - 1][0] + deg 
-                
-                last = i
-                level++
+                data[now][0] = data[last][0] + deg
             }
         }
 
-        var deg = 2 * Math.PI/(data.length - last)
-                
-        for(var j = last + 1; j < data.length; j++)
-            data[j][0] = data[j - 1][0] + deg 
-
         //data = data.slice(0, last)
         
-        console.log(data)
-
         globalData = data
         drawChart(data)
     })
 }
 
 function drawChart(data){
+
+    //console.log(data);
     
     var reMap = function(oldValue) {
         var oldMin = 0,
@@ -84,13 +117,13 @@ function drawChart(data){
         
     }
   
-    var zoom = d3.zoom()
-        .scaleExtent([1, 10])
-        .on("zoom", zoomed);
+    // var zoom = d3.zoom()
+    //     .scaleExtent([1, 10])
+    //     .on("zoom", zoomed);
 
-    function zoomed() {
-        svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-    }
+    // function zoomed() {
+    //     svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    // }
 
     function dragstarted(d) {
         d3.event.sourceEvent.stopPropagation();
@@ -114,12 +147,15 @@ function drawChart(data){
         .domain([0, 1])
         .range([0, radius]);
   
+    //svg.call(zoom)
+
     var svg = d3.select('.polar-chart').append('svg')
-        .call(zoom)
         .attr('width', width)
         .attr('height', height)
         .append('g')
         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
+    var tip = d3.select('#tooltip');
 
     var gr = svg.append('g')
         .attr('class', 'r axis')
@@ -150,34 +186,78 @@ function drawChart(data){
             return -d[0] + Math.PI / 2;
         });
 
-  var tooltip = d3.select("body")
-      .append("div")
-      .style("position", "absolute")
-      .style("z-index", "10")
-      .style("visibility", "hidden")
-      .text("a simple tooltip");
-  
-  svg.selectAll('point')
+    // var tooltip = d3.select("body")
+    //     .append("div")
+    //     .style("position", "absolute")
+    //     .style("z-index", "10")
+    //     .style("visibility", "hidden")
+    //     .text("a simple tooltip");
+
+    svg.selectAll('point')
     .data(data)
     .enter()
     .append('circle')
     .attr('class', 'point')
     .attr('transform', function(d) {
-      //console.log(d);
-  
-      var coors = line([d]).slice(1).slice(0, -1); // removes 'M' and 'Z' from string
-      return 'translate(' + coors + ')'
+        //console.log(d);
+
+        var coors = line([d]).slice(1).slice(0, -1); // removes 'M' and 'Z' from string
+        return 'translate(' + coors + ')'
     })
     .attr('r', function(d) {
-      return d[2];
+        return d[2];
     })
     .attr('fill',function(d,i){
-      return 'red';
+        return d[4];
     }).on("click", function(d){
-      //console.log(d);
-      
-      //return tooltip.style("visibility", "visible");
+
+        tip.html("");
+
+        tip.style('visibility', 'visible');
+
+        tip.append('div')
+        .html('Pessoa ' + d[3])
+        .style('text-align', 'center')
+        .style('font-weight', 'bold')
+        .style('font-family', 'Arial')
+        .style('margin-left', '10px')
+        .style('margin-right', '10px');
+
+        tip.append('div')
+        .html('Similaridade: ' + (100 * (1 - d[1])).toFixed(2) + '%')
+        .style('font-family', 'Arial')
+        .style('margin-top', '10px')
+        .style('margin-left', '10px')
+        .style('margin-right', '10px');
+
+        tip.append('div')
+        .html('Atributos similares: ')
+        .style('font-family', 'Arial')
+        .style('margin-top', '10px')
+        .style('margin-left', '10px')
+        .style('margin-right', '10px');
+
+        var similar = tip.append('ul');
+
+        for(var i = 0; i < d[5].length; i++)
+            similar.append('li')
+            .html(d[5][i]);
+
+        tip.append('div')
+        .html('Atributos diferentes: ')
+        .style('font-family', 'Arial')
+        .style('margin-top', '10px')
+        .style('margin-left', '10px')
+        .style('margin-right', '10px');
+
+        var similar = tip.append('ul');
+
+        for(var i = 0; i < d[6].length; i++)
+            similar.append('li')
+            .html(d[6][i]);
     });
+
+    svg.selectAll
   
   
   
