@@ -15,8 +15,6 @@ with open('dataset/question3.csv', newline='') as inputFile:
                         
                         family_attributes[family][attribute] += 1
 
-
-
 with open('family_attributes.json', 'w') as file:
     file.write('{"children" : [')
     for (i, key) in enumerate(family_attributes):

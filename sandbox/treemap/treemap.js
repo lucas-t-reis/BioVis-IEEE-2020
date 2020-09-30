@@ -1,7 +1,7 @@
 // Setting the dimensions and margins of the graph
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
-	width = 800- margin.left - margin.right,
-	height = 600 - margin.top - margin.bottom;
+	width = 1000- margin.left - margin.right,
+	height = 1000- margin.top - margin.bottom;
 
 // Append the svg object to the body of the page
 var svg = d3.select("#treemap")
@@ -16,6 +16,8 @@ var svg = d3.select("#treemap")
 d3.json("family_attributes.json", function(data) {
 
 	// Give the data to this cluster layout:
+	// Testar porcentagem:w
+	// qe
 	var root = d3.hierarchy(data).sum(d => d.value) 
 
 	// Then d3.treemap computes the position of each element of the hierarchy
@@ -86,8 +88,7 @@ d3.json("family_attributes.json", function(data) {
 		.text("Attributes of suicide cases among 10 families")
 		.attr("font-size", "23px")
 		.attr("fill",  "grey" )
-
-/* OLD APPROACH ----- CHECK IF IT HAS ITS PLACE WITH SABRINA...
+/*
   // Text labels
   svg
     .selectAll("text")
@@ -99,7 +100,7 @@ d3.json("family_attributes.json", function(data) {
       .text(function(d){ return d.data.name })
       .attr("font-size", "15px")
       .attr("fill", "white")
-
+*/
   // Value labels
   svg
     .selectAll("vals")
@@ -112,5 +113,5 @@ d3.json("family_attributes.json", function(data) {
       .attr("font-size", "15px")
       .attr("fill", "white")
 
-	  */
+	  
 });

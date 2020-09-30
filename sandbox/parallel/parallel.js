@@ -1,3 +1,4 @@
+// Tooltip com nome familia, num suicidios , legenda e z-index para trazer as formas 
 var margin = {top:90 ,right:10, bottom:10, left:0}
 	width = 800- margin.left - margin.right,
 	height = 600 - margin.top - margin.bottom;
@@ -13,7 +14,7 @@ var svg = d3.select("#parallel")
 var skipAttributes = ["personid", "KindredID", "suicide", "sex", "Age"]
 
 
-d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/dataset/question3.csv?token=ADE4HTUGICGJEZUXP5ZC4H27OCPKS", function(data) {
+d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/dataset/question3.csv?token=ADE4HTRGXN6ARMTLIS4KVR27PO2VA", function(data) {
 
 	// Suicides per family according to attribute
 	let families = new Map()
@@ -97,13 +98,12 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 	var highlight = function(d) {
 
 		selected_family = d.id
-		console.log("Selecting to highlight:" + selected_family)
 
 		// Grey out all families
 		d3.selectAll(".line")
 			.transition().duration(200)
-			.style("stroke", "lightgrey")
-			.style("opacity", "0.20")
+			.style("stroke", "grey")
+			.style("opacity", "0.60")
 
 		// Color the hovered one
 		d3.selectAll("." + "family_" + selected_family)
@@ -111,6 +111,8 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 			.style("stroke-width", "0.6%")
 			.style("stroke", color(selected_family))
 			.style("opacity", "1")
+			.style("position", "absolute")
+			.style("z-index", "2")
 
 	}
 
@@ -123,8 +125,36 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 			.style("opacity", "1")
 	}
 
+	/* ---------- TOOLTIP ----------*/
+	var tooltip = d3.select("#parallel")
+		.append("div")
+			.style("opacity", 0)
+			.attr("class", "tooltip")
+			.style("background-color", "white")
+			.style("border", "solid")
+			.style("border-width", "1px")
+			.style("border-radius", "5px")
+			.style("padding","5px")
 
-	console.log(family_suicides)
+	var mouseover = function(d) {
+		highlight(d);
+		tooltip.style("opacity", 1)
+	}
+	var mousemove = function(d) {
+
+		tooltip
+			.html("<b>Family:</b>" + d.id + "<br><b>Suicides:</b>" + families.get(d.id).suicides)
+			.style("left", (d3.mouse(this)[0])+"px")
+			.style("top", (d3.mouse(this)[1])+"px")
+			.style("display", "inline-block")
+
+	}
+	var mouseleave = function(d) {
+		noHighlight(d)
+		tooltip.style("opacity", 0) 
+	}
+
+
 	// Drawing the lines
 	svg.selectAll("line_paths")
 		.data(family_suicides)
@@ -135,8 +165,9 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 		.style("stroke", d=>color(d.id))
 		.style("stroke-width", "0.3%")
 		.style("opacity", 1)
-		.on("mouseover", highlight)
-		.on("mouseleave", noHighlight)
+		.on("mouseover", mouseover)
+		.on("mousemove", mousemove)
+		.on("mouseleave", mouseleave)
 	
 	svg.selectAll("attr_axes")
 		.data(dimensions)
