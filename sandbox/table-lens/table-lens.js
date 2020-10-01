@@ -5,8 +5,9 @@ var attr = {}
 var total = {}
 
 var cols = []
-
 var order= []
+
+var tooltip
 
 processSuicides()
 
@@ -23,6 +24,8 @@ function processSuicides(){
                 suicides[rows[i].KindredID]++
             total[rows[i].KindredID]++
         }
+
+        tooltip = d3.select('body').append('div').attr('class', 'tooltip')
 
         processAttr()
     });
@@ -58,7 +61,7 @@ function buildSuicideChart(){
     var data = []
 
     for(var i in suicides)
-        data.push({'family' : i, 'rate' : parseFloat((100.0 * suicides[i]/total[i]).toFixed(2))})
+        data.push({'family' : i, 'rate' : parseFloat((100.0 * suicides[i]/total[i]).toFixed(2)), 'chart' : 'Suícidios'})
 
     data.sort(function(a, b){ return b.rate - a.rate;})
 
@@ -114,7 +117,10 @@ function buildSuicideChart(){
         .attr("x", d=>xScale(d.family))
         .attr("y", d=>yScale(d.rate))
         .attr("width", xScale.bandwidth() )
-        .attr("height", d=>height - margin - yScale(d.rate));
+        .attr("height", d=>height - margin - yScale(d.rate))
+        .on('mouseover', mouseover)
+        .on('mousemove', mousemove)
+        .on('mouseout', mouseout);
     
     for(var i = 0; i < cols.length; i++)
         buildAttrChart(cols[i])
@@ -125,7 +131,7 @@ function buildAttrChart(col){
     var data = []
 
     for(var i = 0; i < order.length; i++)
-        data.push({'family' : order[i], 'rate' : parseFloat((100.0 * attr[order[i]][col]/suicides[order[i]]).toFixed(2))})
+        data.push({'family' : order[i], 'rate' : parseFloat((100.0 * attr[order[i]][col]/suicides[order[i]]).toFixed(2)), 'chart' : col})
 
     //Select objects
     var div = d3.select("#attr-charts")
@@ -148,9 +154,6 @@ function buildAttrChart(col){
         .attr("width", width - margin)
         .attr("transform", "translate(" + 50 + "," + 30 + ")");
         
-    
-    console.log(data)
-
     //Set scales
     var xScale = d3.scaleBand().range([0, width - margin]).padding(0.4),
     yScale = d3.scaleLinear().range([height - margin, 0]);
@@ -176,5 +179,23 @@ function buildAttrChart(col){
         .attr("x", d=>xScale(d.family))
         .attr("y", d=>yScale(d.rate))
         .attr("width", xScale.bandwidth() )
-        .attr("height", d=>height - margin - yScale(d.rate));
+        .attr("height", d=>height - margin - yScale(d.rate))
+        .on('mouseover', mouseover)
+        .on('mousemove', mousemove)
+        .on('mouseout', mouseout);
+}
+
+function mouseover(){
+    tooltip.style('display', 'inline');
+}
+function mousemove(){
+    var d = d3.select(this).data()[0]
+    console.log(d)
+    tooltip
+        .html("Família " + d.family + '<br>' + d.chart + ': ' + d.rate + '%')
+        .style('left', (d3.event.pageX - 34) + 'px')
+        .style('top', (d3.event.pageY - 12) + 'px');
+}
+function mouseout(){
+    tooltip.style('display', 'none');
 }

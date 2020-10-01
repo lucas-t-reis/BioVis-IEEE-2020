@@ -14,6 +14,20 @@
         .blue-bar{
 			fill: #3399ff;
 		}
+        .tooltip{
+            position      : absolute;
+            text-align    : center;
+            max-width     : 100px;
+            max-height    : 30px;
+            padding       : 8px;
+            border        : none;
+            border-radius : 8px;
+            margin-top    : -30px;
+            font          : 10px sans-serif;
+            background    : black;
+            color         : white;
+            pointer-events: none;
+        }
         /* #suicides-chart{
             position: sticky; 
             top: 0;
@@ -26,12 +40,8 @@
 </head>
 
 	<body>
-		<div id="suicides-chart">
-
-        </div>
-        <div id="attr-charts">
-
-        </div>
+        <div id="suicides-chart"></div>
+        <div id="attr-charts"></div>
 	</body>
 
 </html>
