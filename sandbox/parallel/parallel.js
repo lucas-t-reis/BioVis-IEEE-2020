@@ -1,8 +1,6 @@
-// Tooltip com nome familia, num suicidios , legenda e z-index para trazer as formas 
 var margin = {top:90 ,right:10, bottom:10, left:0}
 	width = 800- margin.left - margin.right,
 	height = 600 - margin.top - margin.bottom;
-
 
 var svg = d3.select("#parallel")
 	.append("svg")
@@ -12,7 +10,6 @@ var svg = d3.select("#parallel")
 		.attr("transform", "translate(" + margin.left + "," + margin.top +")")
 
 var skipAttributes = ["personid", "KindredID", "suicide", "sex", "Age"]
-
 
 d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/dataset/question3.csv?token=ADE4HTRGXN6ARMTLIS4KVR27PO2VA", function(data) {
 
@@ -80,6 +77,7 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 					.domain([0.0,0.43])
 					.range([height, 0])
 	})
+
 	var x = d3.scalePoint()
 			.range([0,width])
 			.padding(1)
@@ -94,7 +92,6 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 
 
 	/*---------- ON DEMAND HIGHLIGHT----------*/
-
 	var highlight = function(d) {
 
 		selected_family = d.id
@@ -130,30 +127,24 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 		.append("div")
 			.style("opacity", 0)
 			.attr("class", "tooltip")
-			.style("background-color", "white")
-			.style("border", "solid")
-			.style("border-width", "1px")
-			.style("border-radius", "5px")
-			.style("padding","5px")
 
 	var mouseover = function(d) {
 		highlight(d);
 		tooltip.style("opacity", 1)
 	}
 	var mousemove = function(d) {
-
 		tooltip
-			.html("<b>Family:</b>" + d.id + "<br><b>Suicides:</b>" + families.get(d.id).suicides)
+			.html("<p><b>Family:</b>" + d.id 
+					+ "<p><b>Suicides:</b>" 
+					+ families.get(d.id).suicides)
 			.style("left", (d3.mouse(this)[0])+"px")
-			.style("top", (d3.mouse(this)[1])+"px")
-			.style("display", "inline-block")
-
+			.style("top", (d3.mouse(this)[1])+ "px")
+			.style("position", "absolute")
 	}
 	var mouseleave = function(d) {
 		noHighlight(d)
 		tooltip.style("opacity", 0) 
 	}
-
 
 	// Drawing the lines
 	svg.selectAll("line_paths")
@@ -188,8 +179,3 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 				.attr("transform", "rotate(-45)")
 
 })
-
-
-	
-
-
