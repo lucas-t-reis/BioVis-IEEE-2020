@@ -137,8 +137,10 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 			.html("<p><b>Family:</b>" + d.id 
 					+ "<p><b>Suicides:</b>" 
 					+ families.get(d.id).suicides)
-			.style("left", (d3.mouse(this)[0])+"px")
-			.style("top", (d3.mouse(this)[1])+ "px")
+			// Currently bugged if you resize screen.
+			// Works well on 1366x768 (16:9)
+			.style("left", ((d3.mouse(this)[0])+400) +"px") 
+			.style("top", ((d3.mouse(this)[1])+80) +"px")
 			.style("position", "absolute")
 	}
 	var mouseleave = function(d) {
