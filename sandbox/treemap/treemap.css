@@ -1,3 +1,10 @@
+#wrapper {
+	
+	display: flex;
+	justify-content: center;
+
+}
+
 div.tooltip {
 	font-family: "Segoe UI", Helvetica, Arial, sans-serif;
 	position: absolute;

@@ -16,8 +16,6 @@ var svg = d3.select("#treemap")
 d3.json("family_attributes.json", function(data) {
 
 	// Give the data to this cluster layout:
-	// Testar porcentagem:w
-	// qe
 	var root = d3.hierarchy(data).sum(d => d.value) 
 
 	// Then d3.treemap computes the position of each element of the hierarchy
@@ -42,13 +40,28 @@ d3.json("family_attributes.json", function(data) {
 	var div = d3.select("body").append("div")
 		.attr("class", "tooltip")
 		.style("opacity", 0);
+	var mouseover = function(d) {
+		  div.transition()
+			.duration(200)		
+			.style("opacity", .9);
+		  div.html("Condition: " + d.data.name + "<p>Frequency: " + d.data.value)
+			.style("left", (d3.event.pageX + 2) + "px")		
+			.style("top", (d3.event.pageY + 2) + "px");	
+	}
+	var mouseout = function(d) {
+		  div.transition()
+			.duration(150)
+			.style("opacity", 0);	
+	}
 
+	/*------------ DRAWING THE SVG----------*/ 
 	// Add rectangles:
 	svg.selectAll("rect")
 		.data(root.leaves())
 		.enter()
 		.append("rect")
 		  .attr("id", (d,i)=> i)
+		  .attr("text", "")
 		  .attr('x', d => d.x0)
 		  .attr('y', d => d.y0)
 		  .attr('width', d => d.x1 - d.x0)
@@ -56,20 +69,27 @@ d3.json("family_attributes.json", function(data) {
 		  .style("stroke", "black")
 		  .style("fill", d => color(d.parent.data.name) )
 		  .style("opacity", d => opacity(d.data.value))
-		  .on("mouseover", function(d) {
-			  div.transition()
-				.duration(200)		
-				.style("opacity", .9);
-			  div.html("Condition: " + d.data.name + "<p>Frequency: " + d.data.value)
-				.style("left", (d3.event.pageX) + "px")		
-				.style("top", (d3.event.pageY - 28) + "px");	
-				
-			})
-		  .on("mouseout", function(d) {
-			  div.transition()
-				.duration(150)
-				.style("opacity", 0);	
-			});
+		  .on("mouseover", mouseover)
+		  .on("mouseout", mouseout)
+	
+	svg.selectAll("text")
+		.data(root.leaves())
+		.enter()
+		.append("text")
+		  .attr("x", function(d){ return d.x0+5})
+		  .attr("y", function(d){ return d.y0+20})
+		  .text(function(d){ 
+			  // Since we can't show text properly inside the rectangles,
+			  // this is a workaround using the precalculated ranges of
+			  // opacity to choose when to draw the text. Being interested
+			  // in the most prevalent clinical conditions, it only makes
+			  // sense that we draw conditions with an opacity >= 0.6
+			  let percent = opacity(d.data.value)
+			  if( percent < 0.6) return "";
+			  return d.data.name })
+		  .attr("font-size", "20px")
+		  .attr("fill", "white")
+		  .attr("font-weight", "bold")
 
 	// Add title for the 10 families 
 	svg.selectAll("titles")
@@ -78,40 +98,16 @@ d3.json("family_attributes.json", function(data) {
 		.append("text")
 		  .attr("x", d => d.x0)
 		  .attr("y",d => d.y0+21)
-		  .text((d,i) => i)//d.data.name)
+		  .text((d,i) => d.data.name)
 		  .attr("font-size", "19px")
 		  .attr("fill",  d => color(d.data.name) )
-	// Add title for the 3 groups
+
+	// Add title
 	svg.append("text")
 		.attr("x", 0)
 		.attr("y", 14) 
 		.text("Attributes of suicide cases among 10 families")
 		.attr("font-size", "23px")
 		.attr("fill",  "grey" )
-/*
-  // Text labels
-  svg
-    .selectAll("text")
-    .data(root.leaves())
-    .enter()
-    .append("text")
-      .attr("x", function(d){ return d.x0+5})    
-      .attr("y", function(d){ return d.y0+20})  
-      .text(function(d){ return d.data.name })
-      .attr("font-size", "15px")
-      .attr("fill", "white")
-*/
-  // Value labels
-  svg
-    .selectAll("vals")
-    .data(root.leaves())
-    .enter()
-    .append("text")
-      .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
-      .attr("y", function(d){ return d.y0+35})    // +20 to adjust position (lower)
-      .text(function(d){ return d.data.value })
-      .attr("font-size", "15px")
-      .attr("fill", "white")
 
-	  
 });
