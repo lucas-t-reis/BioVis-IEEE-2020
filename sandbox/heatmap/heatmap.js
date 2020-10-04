@@ -1,6 +1,6 @@
 var margin = {top:30, right:30, bottom:30, left:30},
-	width = 450 - margin.right - margin.left,
-	height = 450 - margin.top - margin.bottom
+	width = 800- margin.right - margin.left,
+	height = 700- margin.top - margin.bottom
 
 var svg = d3.select("#heatmap")
 	.append("svg")
@@ -28,10 +28,11 @@ function mapify(dataset) {
 
 }
 
-var skipAttributes = ["personid", "KindredID", "suicide", "sex", "Age"]
+var skipAttributes = ["personid", "suicide"]
 var tenFamilies = ["38", "149","27251", "42623", 
 				   "68939", "176860", "603481", "791533", "903988"]
-d3.csv("q3.csv", function(data) { 
+
+d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/dataset/question3.csv?token=ADE4HTXXDP3OALA7H54QTY27QJLYE", function(data) { 
 
 	let referencePerson = 47434
 	let indexOf = mapify(data)
@@ -56,13 +57,12 @@ d3.csv("q3.csv", function(data) {
 		Object.keys(neighbor).forEach(key => {
 			
 			if(skipAttributes.includes(key)) return
+			if(personAttributes[key]=="False") return 
 			
 			if(isNaN(closest_neighbors[id]))
 				closest_neighbors[id] = 0
-			
 			// Incrementing count for same conditions as @person in each @neighbor
-			if(personAttributes[key]=="True")
-				closest_neighbors[id] += (neighbor[key] == personAttributes[key])
+			closest_neighbors[id] += (neighbor[key] == personAttributes[key])
 		})
 	}
 
@@ -76,8 +76,8 @@ d3.csv("q3.csv", function(data) {
 	
 	for(const i of closest_neighbors) { 
 
-		// Counting only the ones who have  attributes in common
-		if(i[1] > 0) n++
+		// Counting only the ones who have at least 2 attributes in common
+		if(i[1] > 1) n++
 
 		max_rank = (max_rank < i[1])?i[1]:max_rank
 		rank.set(i[0], i[1]) 
@@ -97,59 +97,67 @@ d3.csv("q3.csv", function(data) {
 		.call(d3.axisBottom(x))
 
 	var y = d3.scaleBand()
-		.range([0, height])
+		.range([height, 0])
 		.domain(labels)
 		.padding(0.01)
 	svg.append("g")
 		.call(d3.axisLeft(y))
 	
-	var tooltip = d3.select("#heatmap")
+	var tooltip = d3.select("body")
 		.append("div")
-			.style("opacity", 0)
 			.attr("class", "tooltip")
-			.style("background-color", "white")
-			.style("border", "solid")
-			.style("border-width", "2px")
-			.style("border-radius", "5px")
-			.style("padding", "5px")
+			.style("opacity", 0)
 
-	var mouseover = d => tooltip.style("opacity", 1)
-	var mousemove = function(d) {
+	var mouseover = function(d) {
+		
+		// Building common attributes string
+		let commonAttr = ""
+		for(const [key, value] of Object.entries(d)) {
+
+			if(d[key]=="False") continue;
+			if(d[key] == personAttributes[key]) 
+				commonAttr += "<p>	- " + key
+		}
+
+
 		tooltip
-			.html("Value:" + rank.get(d.personid) + "<br>Family:"+ d.KindredID)
-			.style("left", (d3.mouse(this)[0]) + "px")
-			.style("top", (d3.mouse(this)[1]) + "px")
+			.html(
+			"<br>Family: "+ d.KindredID
+			+ "<p>Common attributes: " + rank.get(d.personid)	
+			+ "<p><p>" + commonAttr
+			)
+			.style("left", (d3.mouse(this)[0] + 620) + "px")
+			.style("top", (d3.mouse(this)[1] + 10) +"px")
+			.style("opacity", 1)
 	}
-	var mouseleave = d => tooltip.style("opacity", 0)
+	var mouseleave = function(d) {
+		tooltip.transition()
+			.duration(200)
+			.style("opacity", 0)
+	}
 
-	/*
-	var color = d3.scaleLinear()
-		.range(["white", "#69b3a2"])
-		.domain([0.0, 1.0])
-	*/
 
 	var familyColor= d3.scaleOrdinal(d3.schemeCategory10)
 		.domain(tenFamilies)
-
+	
 	// Filtrar
 	svg.selectAll()
 		.data(data)
 		.enter()
 		.append("rect")
-			.attr("x", (d,i) => x((i%gridSize)/n>>0))
-			.attr("y", (d,i) => y((i%gridSize)%n>>0))
+			.attr("x", (d,i) => x(((i%gridSize)/n)>>0))
+			.attr("y", (d,i) => y(((i%gridSize)%n)>>0))
 			.attr("width", x.bandwidth)
 			.attr("height", y.bandwidth)
-			//.style("fill", d => color(rank.get(d.personid)/max_rank + 0.1))
 			.style("fill", d=>familyColor(d.KindredID)) // A color for each family
 			.style("opacity", d=>rank.get(d.personid)/max_rank) // Opacity controlled by ranking
 			.style("stroke", d=> d.personid==String(referencePerson)?"black":"")
 		.on("mouseover", mouseover)
-		.on("mousemove", mousemove)
+		.on("mousemove", mouseover)
 		.on("mouseleave", mouseleave)
 
 	// Removing 0 ranked elements
-	svg.selectAll("rect").filter((d,i)=> (rank.get(d.personid)==0)).remove();
+	svg.selectAll("rect").filter((d,i)=> (rank.get(d.personid)<=1)).remove();
 	
 
 });
