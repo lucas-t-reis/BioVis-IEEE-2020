@@ -1,3 +1,18 @@
+# A fazer
+- [ ] Fazer pergunta 4
+- [ ] Adicionar Filtragem nos eixos paralelos
+- [ ] Adicionar Filtragem no treemap
+- [ ] Pequenos ajustes nos graficos (fonte, tooltip, centralizaçao...)
+- [ ] Esqueleto da relaçao entre paginas
+- [ ] Detalhes cosmeticos no site (plano de fundo, fonte, tamanho de texto...)
+
+
+
+
+
+
+
+
 # BioVis-IEEE
 Data visualization project for the BioVis@IEEE Data Challenge
 
