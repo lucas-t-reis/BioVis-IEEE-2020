@@ -5,13 +5,7 @@
 - [ ] Pequenos ajustes nos graficos (fonte, tooltip, centralizaçao...)
 - [ ] Esqueleto da relaçao entre paginas
 - [ ] Detalhes cosmeticos no site (plano de fundo, fonte, tamanho de texto...)
-
-
-
-
-
-
-
+- [ ] Limpar gitHub (better practices/refatorar)
 
 # BioVis-IEEE
 Data visualization project for the BioVis@IEEE Data Challenge
