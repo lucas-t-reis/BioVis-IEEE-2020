@@ -5,6 +5,8 @@ var similarAttr = {}
 var maxSim = 0
 var tooltip = d3.select("#tooltip")
 
+//42257 is a good one
+
 function processRelatives(id){
     d3.csv("../../dataset/TenFamiliesStructure.csv").then(function(data){
         
@@ -33,7 +35,7 @@ function processRelatives(id){
                 if(data[i].personid == id){
                     parents[0] = (data[i].MaID == "0" ? -1 : data[i].MaID)
                     parents[1] = (data[i].PaID == "0" ? -1 : data[i].PaID)
-                    target = persons[persons.length - 1]
+                    target = persons.length - 1
                 }
             }
         }
@@ -76,10 +78,9 @@ function processAttributes(){
                 if(data[i].personid == persons[j].personid){
                     for(var key in data[i]){
                         if(key != "suicide" && data[i][key] == "True"){
+                            console.log(persons[j].personid + ' ' + data[i].personid + ' ' + j + ' ' + i + ' ' + key)
                             persons[j].attributes.push(key)
                             attrCount[key] = 0
-                            if(data[i].personid == target.personid)
-                                target.attributes.push(key)
                         }
                     }
                 }
@@ -92,12 +93,12 @@ function processAttributes(){
         
         for(var i = 0; i < persons.length; i++){
             for(var j = 0; j < persons[i].attributes.length; j++){
-                if(target.attributes.includes(persons[i].attributes[j]))
+                if(persons[target].attributes.includes(persons[i].attributes[j]))
                     similarAttr[persons[i].personid]++
             }
-            if(target.sex == persons[i].sex)
+            if(persons[target].sex == persons[i].sex)
                 similarAttr[persons[i].personid]++
-            if(target.personid != persons[i].personid)
+            if(persons[target].personid != persons[i].personid)
                 maxSim = (maxSim < similarAttr[persons[i].personid] ? similarAttr[persons[i].personid] : maxSim)
         }
 
@@ -198,7 +199,7 @@ function setTooltip(idx, event){
     var tbody = table.append('tbody')
 
     thead.append('th').html('Person ' + persons[idx].personid + ' Attributes')
-    thead.append('th').html('Target (' + target.personid + ') Attributes')
+    thead.append('th').html('Target (' + persons[target].personid + ') Attributes')
     thead.append('th').html('Common Attributes')
 
     var tr = tbody.append('tr')
@@ -214,19 +215,19 @@ function setTooltip(idx, event){
     var td2 = tr.append('td')
     var ul2 = td2.append('ul')
 
-    ul2.append('li').html(target.sex == 'M' ? 'Male' : 'Female')
+    ul2.append('li').html(persons[target].sex == 'M' ? 'Male' : 'Female')
 
-    for(var i = 0; i < target.attributes.length; i++)
-        ul2.append('li').html(target.attributes[i])
+    for(var i = 0; i < persons[target].attributes.length; i++)
+        ul2.append('li').html(persons[target].attributes[i])
 
     var td3 = tr.append('td')
     var ul3 = td3.append('ul')
 
-    if(persons[idx].sex == target.sex)
-        ul3.append('li').html(target.sex == 'M' ? 'Male' : 'Female')
+    if(persons[idx].sex == persons[target].sex)
+        ul3.append('li').html(persons[target].sex == 'M' ? 'Male' : 'Female')
 
     for(var i = 0; i < persons[idx].attributes.length; i++)
-        if(target.attributes.includes(persons[idx].attributes[i]))
+        if(persons[target].attributes.includes(persons[idx].attributes[i]))
             ul3.append('li').html(persons[idx].attributes[i])
     
     tooltip
