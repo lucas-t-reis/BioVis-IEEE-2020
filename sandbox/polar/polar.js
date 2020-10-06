@@ -3,9 +3,6 @@ var numCircles = 5
 
 processData(47434, 0.05)
 
-//TODO:
-// Adicionar limite de similaridade
-
 function processData(id, limit){
     d3.csv("../../dataset/question3.csv").then(function(rows){
         
