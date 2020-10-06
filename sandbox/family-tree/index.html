@@ -11,45 +11,62 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
-<script src='./family-tree.js'></script>
 
 <style>
     .bs-example{
         margin: 20px;        
     }
+    .container{
+        text-align: center;
+        margin-bottom: 10px;
+        height: 140px;
+    }
+    .legend{
+        margin-top: 30px;
+        text-align: center;
+    }
+    #tooltip{
+        position: absolute;
+        z-index: 999;
+    }
+    table {
+        border-collapse: collapse;
+        border-spacing: 15px;
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
 </style>
 </head>
 <body>
-<div class="bs-example">
-    <div class="card" style="width: 300px;">
-        <div class="text-center card-header bg-danger text-white">
-        	Person 38
-      	</div>
-      	<div class="card-body">
-            <div> 
-              <svg width="20" height="20">
-					<rect width="20" height="20" style="fill:rgb(255, 0, 0);stroke-width:3;stroke:rgb(0,0,0)" />
-              </svg> 
-              Depression 				
-          	</div>
-            <div> 
-              <svg width="20" height="20">
-					<rect width="20" height="20" style="fill:rgb(0,255,0);stroke-width:3;stroke:rgb(0,0,0)" />
-              </svg> 
-              Alcoholism 
-          	</div>
-            <div> 
-            	<svg width="20" height="20">
-					<rect width="20" height="20" style="fill:rgb(0, 0, 255);stroke-width:3;stroke:rgb(0,0,0)" />
-              </svg> 
-              Anxiety 
-          	</div>
-          	<br>
-         <div class="mx-auto text-center">
-            	<a href="#" class="btn btn-primary stretched-link bg-dark">Compare</a>
-          </div>
-        </div>
+    <div id ="parents-container" class="container">
+        <h3>Parents</h3>
+        <svg></svg>
     </div>
-</div>
+    <div id ="siblings-container" class="container">
+        <h3>Siblings</h3>
+        <svg></svg>
+    </div>
+    <div id ="children-container" class="container">
+        <h3>Children</h3>
+        <svg></svg>
+    </div>
+    <div class="legend">
+        <svg width="350">
+            <g><rect width="30" height="30" x = "70" y = "30"></rect></g>
+            <text x = "105" y="50"> Male </text>
+            <g><circle cx="165" cy="45" r="15" x = "140"></circle></g>
+            <text x = "190" y="50"> Female </text>
+            
+            <g><rect width="30" height="30" x = "0" y = "80" fill="#C62017" rx="5"></rect></g>
+            <text x = "35" y="100"> Suicided </text>
+            <g><rect width="30" height="30" x = "105" y = "80" fill="#A9CCD1" rx="5"></rect></g>
+            <text x = "140" y="100"> Didn't Suicided </text>
+            <g><rect width="30" height="30" x = "255" y = "80" fill="#EAD833" rx="5"></rect></g>
+            <text x = "290" y="100"> Target </text>
+        </svg>
+    </div>
+    <div id="tooltip" style="visibility: hidden;"></div>
+    <script src='./family-tree.js'></script>
 </body>
 </html>
