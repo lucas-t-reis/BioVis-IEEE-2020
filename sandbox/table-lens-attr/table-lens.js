@@ -213,7 +213,7 @@ function mouseover(){
 function mousemove(){
     var d = d3.select(this).data()[0]
     tooltip
-        .html("Família " + d.family + '<br>' + d.chart + ': ' + d.rate + '%')
+        .html("Family " + d.family + '<br>' + d.chart + ': ' + d.rate + '%')
         .style('left', (d3.event.pageX - 34) + 'px')
         .style('top', (d3.event.pageY - 12) + 'px');
 }
