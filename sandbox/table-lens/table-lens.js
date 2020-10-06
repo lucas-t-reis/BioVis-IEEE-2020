@@ -82,7 +82,7 @@ function buildSuicideChart(){
         .style("font-size", "16px") 
         .style("text-decoration", "underline")
         .style("font-family", "Arial")
-        .text("Taxa de suicídios por família")
+        .text("suicide rate by family")
     
     var g = svg.append("g")
         .attr("height", height - margin)
@@ -147,7 +147,7 @@ function buildAttrChart(col){
         .style("font-size", "16px") 
         .style("text-decoration", "underline")
         .style("font-family", "Arial")
-        .text("Taxa de " + col + " por suicídio")
+        .text(col + " rate by family")
     
     var g = svg.append("g")
         .attr("height", height - margin)
@@ -192,7 +192,7 @@ function mousemove(){
     var d = d3.select(this).data()[0]
     console.log(d)
     tooltip
-        .html("Família " + d.family + '<br>' + d.chart + ': ' + d.rate + '%')
+        .html("Family " + d.family + '<br>' + d.chart + ': ' + d.rate + '%')
         .style('left', (d3.event.pageX - 34) + 'px')
         .style('top', (d3.event.pageY - 12) + 'px');
 }
