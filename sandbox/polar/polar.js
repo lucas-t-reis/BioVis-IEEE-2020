@@ -1,7 +1,11 @@
 var globalData
 var numCircles = 5
 
-processData(47434, 0.05)
+var urlString = window.location.href
+var url = new URL(urlString)
+var urlId = url.searchParams.get('id')
+
+processData(urlId, 0.05)
 
 function processData(id, limit){
     d3.csv("../../dataset/question3.csv").then(function(rows){
