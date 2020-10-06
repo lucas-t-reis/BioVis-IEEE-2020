@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<meta charset="UTF-8">
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="./table-lens.js"></script>
+
+	<title>D3 sandbox</title>
+	<style>
+		.red-bar{
+			fill: #ff0000;
+		}
+        .blue-bar{
+			fill: #3399ff;
+		}
+        .tooltip{
+            position      : absolute;
+            text-align    : center;
+            max-width     : 100px;
+            max-height    : 30px;
+            padding       : 8px;
+            border        : none;
+            border-radius : 8px;
+            margin-top    : -30px;
+            font          : 10px sans-serif;
+            background    : black;
+            color         : white;
+            pointer-events: none;
+        }
+        #suicides-chart{
+            position: sticky; 
+            top: 0;
+            z-index: 999;
+            background-color: white;
+            height: 300px;
+        }
+        #attr-charts svg{
+            margin-bottom: 20px;
+        }
+        svg{
+            border: 1px #000 solid
+        }
+        #select-box{
+            text-align: center;
+        }
+	</style>
+
+</head>
+
+	<body>
+        <div id="select-box">
+            <select id='mainAttr' onchange="updateAttr()"></select>
+        </div>
+        <div id="charts">
+            <div id="main-chart"></div>
+            <div id="attr-charts"></div>
+        </div>
+    </body>
+
+</html>
+
