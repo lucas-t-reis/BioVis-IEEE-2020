@@ -4,8 +4,9 @@ var numCircles = 5
 var urlString = window.location.href
 var url = new URL(urlString)
 var urlId = url.searchParams.get('id')
+var urlLimit = parseFloat(url.searchParams.get('limit'))
 
-processData(urlId, 0.05)
+processData(urlId, urlLimit)
 
 function processData(id, limit){
     d3.csv("../../dataset/question3.csv").then(function(rows){
@@ -256,6 +257,12 @@ function drawChart(data){
         for(var i = 0; i < d[6].length; i++)
             similar.append('li')
             .html(d[6][i]);
+
+        tip.append('div')
+        .style('text-align', 'center')
+        .append('a')
+        .html('Analisar essa pessoa')
+        .attr('href', url.pathname + '?id=' + d[3] + '&limit=' + urlLimit)
     });
 
     svg.selectAll
