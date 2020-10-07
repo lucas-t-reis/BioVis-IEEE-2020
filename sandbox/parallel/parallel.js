@@ -11,8 +11,7 @@ var svg = d3.select("#parallel")
 
 var skipAttributes = ["personid", "KindredID", "suicide", "sex", "Age"]
 
-d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/dataset/question3.csv?token=ADE4HTRGXN6ARMTLIS4KVR27PO2VA", function(data) {
-
+d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/dataset/question3.csv?token=ADE4HTS5YXEHQLSSIN4SUUK7Q6EZK", function(data) {
 	// Suicides per family according to attribute
 	let families = new Map()
 
@@ -106,7 +105,12 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 		d3.selectAll("." + "family_" + selected_family)
 			.transition().duration(200)
 			.style("stroke-width", "0.6%")
-			.style("stroke", color(selected_family))
+			.style("stroke", (d) => {
+				if (selected_family == 68939) // Quickfix to remove RED from the pallete...
+					return "#2f0000"
+				else 
+					return color(d.id)
+			})
 			.style("opacity", "1")
 			.style("position", "absolute")
 			.style("z-index", "2")
@@ -118,7 +122,12 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 		d3.selectAll(".line")
 			.transition().duration(200).delay(500)
 			.style("stroke-width", "0.3%")
-			.style("stroke", d=>color(d.id))
+			.style("stroke", (d) => {
+				if (d.id == 68939)
+					return "#2f0000"
+				else 
+					return color(d.id)
+			})
 			.style("opacity", "1")
 	}
 
@@ -155,7 +164,12 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 		.attr("class", d => "line " + "family_" + d.id) // CSS selector cant handle class id beginning with integer, hence family_+id
 		.attr("d", path)
 		.style("fill", "none")
-		.style("stroke", d=>color(d.id))
+		.style("stroke", (d)=> {
+			if (d.id == 68939)
+				return "#2f0000"
+			else 
+				return color(d.id)
+		})
 		.style("stroke-width", "0.3%")
 		.style("opacity", 1)
 		.on("mouseover", mouseover)
