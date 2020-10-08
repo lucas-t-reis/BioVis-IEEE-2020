@@ -16,7 +16,7 @@ var svg = d3.select("#treemap")
 d3.json("family_attributes.json", function(data) {
 
 	// Give the data to this cluster layout:
-	var root = d3.hierarchy(data).sum(d => d.value) 
+	var root = d3.hierarchy(data).sum(d => d.value/d.total)
 
 	// Then d3.treemap computes the position of each element of the hierarchy
 	d3.treemap()
@@ -33,7 +33,7 @@ d3.json("family_attributes.json", function(data) {
 
 	// Heatmap opacity scale
 	var opacity = d3.scaleLinear()
-		.domain([1, 13])
+		.domain([0.0, 1.0])
 		.range([.5,1])
 
 	// Tooltip
@@ -68,7 +68,7 @@ d3.json("family_attributes.json", function(data) {
 		  .attr('height', d => d.y1 - d.y0)
 		  .style("stroke", "black")
 		  .style("fill", d => color(d.parent.data.name) )
-		  .style("opacity", d => opacity(d.data.value))
+		  .style("opacity", d => opacity(d.data.value/d.data.total))
 		  .on("mouseover", mouseover)
 		  .on("mouseout", mouseout)
 	
@@ -84,8 +84,8 @@ d3.json("family_attributes.json", function(data) {
 			  // opacity to choose when to draw the text. Being interested
 			  // in the most prevalent clinical conditions, it only makes
 			  // sense that we draw conditions with an opacity >= 0.6
-			  let percent = opacity(d.data.value)
-			  if( percent < 0.6) return "";
+			  let percent = opacity(d.data.value/d.data.total)
+			  if( percent < 0.7) return "";
 			  return d.data.name })
 		  .attr("font-size", "20px")
 		  .attr("fill", "white")
@@ -98,7 +98,7 @@ d3.json("family_attributes.json", function(data) {
 		.append("text")
 		  .attr("x", d => d.x0)
 		  .attr("y",d => d.y0+21)
-		  .text((d,i) => d.data.name)
+		  .text((d,i) => d.data.name + " total suicides:" + d.data.children.length)
 		  .attr("font-size", "19px")
 		  .attr("fill",  d => color(d.data.name) )
 
