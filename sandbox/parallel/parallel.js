@@ -11,7 +11,7 @@ var svg = d3.select("#parallel")
 
 var skipAttributes = ["personid", "KindredID", "suicide", "sex", "Age"]
 
-d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/dataset/question3.csv?token=ADE4HTS5YXEHQLSSIN4SUUK7Q6EZK", function(data) {
+d3.csv("../../dataset/filtered_data.csv", function(data) {
 	// Suicides per family according to attribute
 	let families = new Map()
 

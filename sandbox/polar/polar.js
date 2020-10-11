@@ -9,7 +9,7 @@ var urlLimit = parseFloat(url.searchParams.get('limit'))
 processData(urlId, urlLimit)
 
 function processData(id, limit){
-    d3.csv("../../dataset/question3.csv").then(function(rows){
+    d3.csv("../../dataset/filtered_data.csv").then(function(rows){
         
         var person, data = [], columns = rows.columns
 

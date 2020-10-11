@@ -49,7 +49,7 @@ function processSuicides(){
 }
 
 function processAttr(){
-    d3.csv("../../dataset/question3.csv").then(function(rows){
+    d3.csv("../../dataset/filtered_data.csv").then(function(rows){
         
         for(var i in rows[0]){
             if(!['personid','KindredID','suicide','sex','Age'].includes(i)){

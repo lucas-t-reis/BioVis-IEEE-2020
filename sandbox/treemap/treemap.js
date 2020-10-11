@@ -13,7 +13,7 @@ var svg = d3.select("#treemap")
 			  "translate(" + margin.left + "," + margin.top + ")");
 
 // Read json data
-d3.json("family_attributes.json", function(data) {
+d3.json("../../dataset/family_attributes.json", function(data) {
 
 	// Give the data to this cluster layout:
 	var root = d3.hierarchy(data).sum(d => d.value/d.total)

@@ -77,7 +77,7 @@ function processData(data){
 }
 
 $("#renderBtn").click(
-    Papa.parse('../../dataset/question3.csv', {
+    Papa.parse('../../dataset/filtered_data.csv', {
         header: true,
         download: true,
         dynamicTyping: true,

@@ -1,7 +1,7 @@
 import csv
 attributes = ['alcohol', 'psychosis', 'anxiety-non-trauma', 'somatic disorder', 'eating', 'bipolar spectrum illness', 'depression', 'interpersonal trauma', 'PD-Cluster C-anxiety', 'PD-Cluster B-emotional', 'PD', 'Impulse control disorder', 'obesity', 'cardiovascular', 'COPD', 'asthma', 'immune-autoimmune']
 family_attributes = {}
-with open('dataset/question3.csv', newline='') as inputFile:
+with open('dataset/filtered_data.csv', newline='') as inputFile:
         reader = csv.DictReader(inputFile)
         for row in reader:
                 family = int(row['KindredID'])

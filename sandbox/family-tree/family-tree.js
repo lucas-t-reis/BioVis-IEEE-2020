@@ -71,7 +71,7 @@ function processRelatives(id){
 }
 
 function processAttributes(){
-    d3.csv("../../dataset/question3.csv").then(function(data){
+    d3.csv("../../dataset/filtered_data.csv").then(function(data){
         
         for(var i = 0; i < data.length; i++){
             for(var j = 0; j < persons.length; j++){
