@@ -1,5 +1,5 @@
-var margin = {top:90 ,right:10, bottom:10, left:0}
-	width = 800- margin.left - margin.right,
+var margin = {top:150 ,right:10, bottom:10, left:0}
+	width = 900- margin.left - margin.right,
 	height = 600 - margin.top - margin.bottom;
 
 var svg = d3.select("#parallel")
@@ -11,7 +11,7 @@ var svg = d3.select("#parallel")
 
 var skipAttributes = ["personid", "KindredID", "suicide", "sex", "Age"]
 
-d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/dataset/question3.csv?token=ADE4HTS5YXEHQLSSIN4SUUK7Q6EZK", function(data) {
+d3.csv("../../dataset/filtered_data.csv", function(data) {
 	// Suicides per family according to attribute
 	let families = new Map()
 
@@ -89,7 +89,12 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 		)
 	}
 
-
+	let options = document.getElementsByTagName("p")
+	for(element of options) {
+		console.log(element.id)
+		element.onmouseover = function wrapper() { mouseover(element.id) }
+		element.onmouseout = function wrapper() { highlight(element.id) }
+	}
 	/*---------- ON DEMAND HIGHLIGHT----------*/
 	var highlight = function(d) {
 
@@ -130,7 +135,7 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 			})
 			.style("opacity", "1")
 	}
-
+	
 	/* ---------- TOOLTIP ----------*/
 	var tooltip = d3.select("#parallel")
 		.append("div")
@@ -138,18 +143,44 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 			.attr("class", "tooltip")
 
 	var mouseover = function(d) {
+		console.log("Got called by " + d)
+		if(typeof(d) == "string")
+			console.log("d type:" + typeof(d) + " " + d)
+			for(const i in family_suicides){
+				console.log(typeof(family_suicides[i].id) + " has " + family_suicides
+				[i].id)
+				if(family_suicides[i].id == d) {
+					console.log("Printing stuff...")
+					for(const a of family_suicides[i])
+						console.log(a)
+					console.log("Type:" + typeof(family_suicides[i]))
+					console.log(family_suicides[i].id)
+					console.log("Type:" + typeof(d))
+					console.log(d)
+					d = new Object(family_suicides[i])
+					break
+				}
+			}
+		console.log("Calling high to " +  d)
 		highlight(d);
 		tooltip.style("opacity", 1)
 	}
 	var mousemove = function(d) {
+		
+		if(typeof(d) == "number")
+			for(const family of family_suicides)
+				if(family.id == d.toString()) {
+					d = family
+					break;
+				}
 		tooltip
 			.html("<p><b>Family:</b>" + d.id 
 					+ "<p><b>Suicides:</b>" 
 					+ families.get(d.id).suicides)
 			// Currently bugged if you resize screen.
 			// Works well on 1366x768 (16:9)
-			.style("left", ((d3.mouse(this)[0])+400) +"px") 
-			.style("top", ((d3.mouse(this)[1])+80) +"px")
+			.style("left", ((d3.mouse(this)[0])+350) +"px") 
+			.style("top", ((d3.mouse(this)[1])+130) +"px")
 			.style("position", "absolute")
 	}
 	var mouseleave = function(d) {
@@ -189,9 +220,18 @@ d3.csv("https://raw.githubusercontent.com/lucas-t-reis/BioVis-IEEE-2020/master/d
 				})
 			.append("text")
 				.style("text-anchor", "start")
+				.attr("font-size", "12px")
 				.attr("y", -9)
 				.text(d=>d)
 				.style("fill", "black")
 				.attr("transform", "rotate(-45)")
+	
+	// Graph title
+	svg.append("text")
+		.attr("x", 0)
+		.attr("y", -118)
+		.text("Prevalence of suicide attributes in each family")
+		.attr("font-size", "32px")
+		.attr("fill", "grey")
 
 })

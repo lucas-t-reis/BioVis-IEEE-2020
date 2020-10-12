@@ -39,7 +39,7 @@ with open('dataset/TenFamiliesStructure.csv', newline='') as inputFile:
                 pessoas[personid]['sex'] = row['sex']
                 pessoas[personid]['Age'] = int(float(row['Age']))
 
-with open('dataset/question3.csv', 'w', newline='') as outputFile:
+with open('dataset/filtered_data.csv', 'w', newline='') as outputFile:
         fields = ['personid', 'KindredID', 'suicide', 'sex', 'Age'] + attributes
         writer = csv.DictWriter(outputFile, fieldnames=fields)
 
