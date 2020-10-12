@@ -11,9 +11,11 @@ var svg = d3.select("#parallel")
 
 var skipAttributes = ["personid", "KindredID", "suicide", "sex", "Age"]
 
+var color, families, suicides
+
 d3.csv("../../dataset/filtered_data.csv", function(data) {
 	// Suicides per family according to attribute
-	let families = new Map()
+	families = new Map()
 
 	// Processing each family suicide count per attribute
 	for(row of data){
@@ -63,7 +65,8 @@ d3.csv("../../dataset/filtered_data.csv", function(data) {
 
 	// Getting dimensions for the various y axes
 	let dimensions = d3.keys(data[0]).filter(d => !skipAttributes.includes(d))
-	let color = d3.scaleOrdinal()
+	
+	color = d3.scaleOrdinal()
 		.domain([...families.keys()])
 		.range(d3.schemeCategory10) // Plugin in index.html provides this pallete
 	
@@ -87,13 +90,6 @@ d3.csv("../../dataset/filtered_data.csv", function(data) {
 		return d3.line()(dimensions.map(function (elem) {
 			return [x(elem),y[elem](d[elem]/d["suicides"])]})
 		)
-	}
-
-	let options = document.getElementsByTagName("p")
-	for(element of options) {
-		console.log(element.id)
-		element.onmouseover = function wrapper() { mouseover(element.id) }
-		element.onmouseout = function wrapper() { highlight(element.id) }
 	}
 	/*---------- ON DEMAND HIGHLIGHT----------*/
 	var highlight = function(d) {
@@ -143,36 +139,11 @@ d3.csv("../../dataset/filtered_data.csv", function(data) {
 			.attr("class", "tooltip")
 
 	var mouseover = function(d) {
-		console.log("Got called by " + d)
-		if(typeof(d) == "string")
-			console.log("d type:" + typeof(d) + " " + d)
-			for(const i in family_suicides){
-				console.log(typeof(family_suicides[i].id) + " has " + family_suicides
-				[i].id)
-				if(family_suicides[i].id == d) {
-					console.log("Printing stuff...")
-					for(const a of family_suicides[i])
-						console.log(a)
-					console.log("Type:" + typeof(family_suicides[i]))
-					console.log(family_suicides[i].id)
-					console.log("Type:" + typeof(d))
-					console.log(d)
-					d = new Object(family_suicides[i])
-					break
-				}
-			}
-		console.log("Calling high to " +  d)
 		highlight(d);
 		tooltip.style("opacity", 1)
 	}
+
 	var mousemove = function(d) {
-		
-		if(typeof(d) == "number")
-			for(const family of family_suicides)
-				if(family.id == d.toString()) {
-					d = family
-					break;
-				}
 		tooltip
 			.html("<p><b>Family:</b>" + d.id 
 					+ "<p><b>Suicides:</b>" 
@@ -235,3 +206,54 @@ d3.csv("../../dataset/filtered_data.csv", function(data) {
 		.attr("fill", "grey")
 
 })
+
+function highlightHtml(id){
+
+	selected_family = id
+
+	// Grey out all families
+	d3.selectAll(".line")
+		.transition().duration(200)
+		.style("stroke", "grey")
+		.style("opacity", "0.60")
+
+	console.log("." + "family_" + selected_family);
+
+	// Color the hovered one
+	d3.selectAll("." + "family_" + selected_family)
+		.transition().duration(200)
+		.style("stroke-width", "0.6%")
+		.style("stroke", () => {
+			if (selected_family == 68939) // Quickfix to remove RED from the pallete...
+				return "#2f0000"
+			else 
+				return color(id)
+		})
+		.style("opacity", "1")
+		.style("position", "absolute")
+		.style("z-index", "2");
+
+	d3.select('.tooltip')
+	.style("opacity", 1)
+	.html("<p><b>Family:</b>" + id 
+			+ "<p><b>Suicides:</b>" 
+			+ families.get(id).suicides)
+	.style("left", "350px") 
+	.style("top", "300px")
+	.style("position", "absolute")
+}
+
+function noHighlightHtml(){
+	d3.selectAll(".line")
+		.data([...families.keys()])
+		.style("stroke-width", "0.3%")
+		.style("stroke", (id) => {
+			if (id == 68939)
+				return "#2f0000"
+			else 
+				return color(id)
+		})
+		.style("opacity", "1");
+
+	d3.select('.tooltip').style("opacity", 1)
+}
