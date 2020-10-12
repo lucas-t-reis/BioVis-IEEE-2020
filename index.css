@@ -9,7 +9,7 @@
   margin-bottom: 0;
   background: linear-gradient(-45deg,#00BBDB,#0099EB);
   background-size: 400% 400%;
-  animation: gradient 30s ease infinite;
+  animation: gradient 20s ease infinite;
   color: white;
 }
 

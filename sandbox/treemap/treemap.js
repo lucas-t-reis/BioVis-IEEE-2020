@@ -83,7 +83,7 @@ d3.json("../../dataset/family_attributes.json", function(data) {
 			  // this is a workaround using the precalculated ranges of
 			  // opacity to choose when to draw the text. Being interested
 			  // in the most prevalent clinical conditions, it only makes
-			  // sense that we draw conditions with an opacity >= 0.6
+			  // sense that we draw conditions with an opacity >= 0.7
 			  let percent = opacity(d.data.value/d.data.total)
 			  if( percent < 0.7) return "";
 			  return d.data.name })
