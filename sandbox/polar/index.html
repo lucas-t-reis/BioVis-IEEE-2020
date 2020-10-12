@@ -82,7 +82,19 @@
         <div id="chart-container" style="width: 100wp">
             <svg class="polar-chart" width="750" height="625"></svg>
             <div id="legend">
-                <ul>
+                <div>
+                    Destacar atributo: 
+                    <select id="attrSelect" onchange="changeAttr()">
+                        <option value="none">Nenhum</option>
+                    </select>
+                </div>
+                <br>
+                <div>
+                    Mínimo de Similaridade: 
+                    <input id="limitInput" type="number" min="0" max="100" value="0" onchange="changeLimit()"> %
+                </div>
+                <br>
+                    <!-- <ul>
                     <li> 
                         <svg class="legend-label" width="40" height="20">
                             <rect width="40" height="20" style="fill:rgb(255,0,0);stroke-width:3;stroke:rgb(0,0,0)">
@@ -101,7 +113,7 @@
                         </svg>
                         Pessoa Analisada
                     </li>
-                </ul>
+                </ul> -->
                 Clique nos pontos para obter mais detalhes
             </div>
             <div id="tooltip"></div>

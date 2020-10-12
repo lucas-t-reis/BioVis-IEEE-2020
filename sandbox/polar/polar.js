@@ -20,8 +20,6 @@ function processData(id, limit){
             }
         }
 
-        console.log(person);
-
         for(var i = 0; i < rows.length; i++){
             
             var commonAttr = 0, totalAttr = 0, pos = data.length;
@@ -49,20 +47,22 @@ function processData(id, limit){
                 }
             }
 
-            if(rows[i].KindredID == person.KindredID)
-                data[pos][4] = '#00dddd';
             if(rows[i].personid == person.personid)
-                data[pos][4] = '#eeee00';
+                data[pos][4] = '#00bbbb';
 
             data[pos][1] = 1 - commonAttr/totalAttr
 
             if(1 - data[pos][1] < limit)
                 data.pop()
+
+            if(data.length > 0 && data[pos][3] == person.personid){
+                for(var j = 0; j < data[pos][5].length; j++)
+                    if(data[pos][5][j] != "personid")
+                        d3.select("#attrSelect").append("option").html(data[pos][5][j]).attr("value", data[pos][5][j]);
+            }
         }
 
         data.sort(function(a, b){ return a[1] - b[1]})
-
-        console.log(data)
 
         var level = 0, idx = 0, levels = []
 
@@ -78,16 +78,12 @@ function processData(id, limit){
             level++
         }
 
-        console.log(levels)
-
         for(var i = 0; i <= numCircles; i++){
             
             if(levels[i].length == 0)
                 continue;
             
             var deg = 2 * Math.PI / levels[i].length
-
-            console.log(deg + ' ' + levels[i].length)
 
             for(var j = 1; j < levels[i].length; j++){
                 
@@ -152,6 +148,7 @@ function drawChart(data){
     //svg.call(zoom)
 
     var svg = d3.select('.polar-chart').append('svg')
+        .attr('id', 'polar-svg')
         .attr('width', width)
         .attr('height', height)
         .append('g')
@@ -264,10 +261,6 @@ function drawChart(data){
         .html('Analisar essa pessoa')
         .attr('href', url.pathname + '?id=' + d[3] + '&limit=' + urlLimit)
     });
-
-    svg.selectAll
-  
-  
   
 //   // adding labels
 //   svg.selectAll('point')
@@ -282,4 +275,42 @@ function drawChart(data){
 //         .text(function(d) {         
 //           return d[3]; 
 //         });   
+}
+
+function changeLimit(){
+    
+    var limit = d3.select('#limitInput').property('value');
+    var svg = d3.select('#polar-svg');
+
+    if(limit < 0)
+        limit = 0
+    if(limit > 100)
+        limit = 100
+
+    document.getElementById('limitInput').value = limit;
+
+    svg.selectAll('.point')
+    .data(globalData)
+    .attr('visibility', function(d){
+        return ((1 - d[1]) < (limit/100.0) ? 'hidden' : 'visible');
+    });
+}
+
+function changeAttr(){
+    
+    var option = d3.select('#attrSelect').property('value');
+    var svg = d3.select('#polar-svg');
+
+    svg.selectAll('.point')
+    .data(globalData)
+    .attr('fill', function(d){
+        if(option == 'none')
+            return '#ff0000';
+        return (d[5].includes(option) ? '#ff0000' : '#cccccc');
+    })
+    .attr('z-index', function(d){
+        if(option == 'none')
+            return '100';
+        return (d[5].includes(option) ? '100' : '99');
+    });
 }
