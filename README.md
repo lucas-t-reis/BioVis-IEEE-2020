@@ -1,43 +1,39 @@
 # A fazer
-- [ ] Fazer pergunta 4
-- [ ] Adicionar Filtragem nos eixos paralelos
-- [ ] Adicionar Filtragem no treemap
-- [ ] Pequenos ajustes nos graficos (fonte, tooltip, centralizaçao...)
+
 - [ ] Esqueleto da relaçao entre paginas
-- [ ] Detalhes cosmeticos no site (plano de fundo, fonte, tamanho de texto...)
-- [ ] Limpar gitHub (better practices/refatorar)
+
+- Estrutura do Paper: Mínimo 4 páginas
+  - **Abstract**
+  - **Introdução**
+    - O que e visualização, como e feita e pq e importante para resolver esse problema.
+  - **Metodologia**
+    - Descrever o dataset (atributos, numero de familias...)
+  - **Questões respondidas (fotos, descrever,...)**
+    - Descrever a questão (o que ela pede)
+    - Descrever as visualizações
+    - Apontar vantagens/disvantagens de seu uso
+    - Evidenciar um dado importante que foi extraído da visualização
+  - **Conclusão**
+    - Reafirmar as vantagens de usar visualização para extrair informações 'escondidas' em grande volume de dados
+    - trabalhos futuros, falar sobre o q faltou e o que poderia ter sido feito melhor
+  - **Referências**
+    - Referencias artigos que ela passou, livro da disciplina e material teórico.
+
+- https://docs.google.com/presentation/d/18u4T5Y6lpFaYuCQQ2nRFAJpnrGWcj5QvY6PBX_ZekbY/edit?usp=sharing
+- https://docs.google.com/document/d/1ehnJ4RLszOWBE1lWKxVz9QsDcDxYHZYfN76qFLSbY4Y/edit?usp=sharing
 
 # BioVis-IEEE
 Data visualization project for the BioVis@IEEE Data Challenge
 
-# Modelo do PDF
-http://junctionpublishing.org/vgtc/Tasks/camera.html
 
 Incluir dados faltantes no datasets? Caso dos 161x173 suicidios
 # Questions to Answer
 
 - [ ] For a given target individual, identify similar cases, including how they are related amongst themselves (such as whether they co-occur in a given family) 
-
->Identificar Relaçao entre pessoas
->Ideia usar dispersao com formula de distancia customizavel ...
-
 - [ ] Characterize the distribution of clinical attributes for suicide cases in families with high incidence ratios (high relative number of cases)
-
->Histograma
->Histograma de atributos em grupo?
->Identificar atributos que quando presentes em grupo sao determinantes para o suicidio mas que sozinhos nao contribuem tanto.
-
 - [ ] Characterize (i.e, the relationship between cases and their attributes) suicide cases in families with high incidences of a given clinical attribute (such as depression)
-
->Barra
->Dado que uma familia tem numero elevado de determinado caso clinico, caracterizar os
->casos de suicidio. 
->AHABDJBCC
->AAABBBCBA
-
 - [ ] Compare clinical information for suicide cases with their immediate relatives (siblings, parents, and children).
 
->Explorar grafo e clicar no vertice mostra em comum
 
 ## Atributes Structure
 
