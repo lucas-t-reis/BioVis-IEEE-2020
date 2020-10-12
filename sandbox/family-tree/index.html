@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Bootstrap 4 Card</title>
+<title>Family Tree</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -22,7 +22,7 @@
         height: 140px;
     }
     .legend{
-        margin-top: 30px;
+        margin-top: 10px;
         text-align: center;
     }
     #tooltip{
@@ -39,17 +39,21 @@
 </style>
 </head>
 <body>
+    <div id="select-box" class='text-center'>
+        <label for="refPerson">Choose a person</label>
+        <select id="refPerson" onchange="updateGraph()"></select>
+    </div>
     <div id ="parents-container" class="container">
-        <h3>Parents</h3>
-        <svg></svg>
+        <h4>Parents</h4>
+        <svg class='chart-svg'></svg>
     </div>
     <div id ="siblings-container" class="container">
-        <h3>Siblings</h3>
-        <svg></svg>
+        <h4>Siblings</h4>
+        <svg class='chart-svg'></svg>
     </div>
     <div id ="children-container" class="container">
-        <h3>Children</h3>
-        <svg></svg>
+        <h4>Children</h4>
+        <svg class='chart-svg'></svg>
     </div>
     <div class="legend">
         <svg width="350">
@@ -61,7 +65,7 @@
             <g><rect width="30" height="30" x = "0" y = "80" fill="#C62017" rx="5"></rect></g>
             <text x = "35" y="100"> Suicided </text>
             <g><rect width="30" height="30" x = "105" y = "80" fill="#A9CCD1" rx="5"></rect></g>
-            <text x = "140" y="100"> Didn't Suicided </text>
+            <text x = "140" y="100"> Didn't Suicide </text>
             <g><rect width="30" height="30" x = "255" y = "80" fill="#EAD833" rx="5"></rect></g>
             <text x = "290" y="100"> Target </text>
         </svg>

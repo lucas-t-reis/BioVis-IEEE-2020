@@ -7,6 +7,43 @@ var tooltip = d3.select("#tooltip")
 
 //42257 is a good one
 
+getPeople()
+
+function getPeople(){
+    d3.csv("../../dataset/TenFamiliesStructure.csv").then(function(rows){
+        
+        var select = document.getElementById("refPerson")
+        var i = 0
+        
+        var sorted = []
+    
+        for(const person of rows) 
+            sorted.push(person.personid);
+        
+        sorted.sort((a, b) => {return a - b;})
+    
+        for(var i = 0; i < sorted.length; i++) {
+            let option = document.createElement("option");
+            option.text = sorted[i];
+            select.add(option, select[i])
+            i++
+        }
+        
+        d3.select('#refPerson').property('value', 42257)
+
+        processData(42257, 0)
+    });    
+}
+
+function updateGraph(){
+    persons = []
+    attrCount = {}
+    similarAttr = {}
+    maxSim = 0
+    d3.selectAll('.chart-svg').html("");
+    processRelatives(d3.select('#refPerson').property('value'))
+}
+
 function processRelatives(id){
     d3.csv("../../dataset/TenFamiliesStructure.csv").then(function(data){
         

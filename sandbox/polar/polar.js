@@ -1,12 +1,38 @@
 var globalData
 var numCircles = 5
 
-var urlString = window.location.href
-var url = new URL(urlString)
-var urlId = url.searchParams.get('id')
-var urlLimit = parseFloat(url.searchParams.get('limit'))
+getPeople()
 
-processData(urlId, urlLimit)
+function getPeople(){
+    d3.csv("../../dataset/filtered_data.csv").then(function(rows){
+        
+        var select = document.getElementById("refPerson")
+        var i = 0
+        
+        var sorted = []
+    
+        for(const person of rows) 
+            sorted.push(person.personid);
+        
+        sorted.sort((a, b) => {return a - b;})
+    
+        for(var i = 0; i < sorted.length; i++) {
+            let option = document.createElement("option");
+            option.text = sorted[i];
+            select.add(option, select[i])
+            i++
+        }
+        
+        d3.select('#refPerson').property('value', 11605)
+
+        processData(11605, 0)
+    });    
+}
+
+function updateGraph(){
+    d3.select('.polar-chart').html("");
+    processData(d3.select('#refPerson').property('value'))
+}
 
 function processData(id, limit){
     d3.csv("../../dataset/filtered_data.csv").then(function(rows){
@@ -47,8 +73,8 @@ function processData(id, limit){
                 }
             }
 
-            if(rows[i].personid == person.personid)
-                data[pos][4] = '#00bbbb';
+            // if(rows[i].personid == person.personid)
+            //     data[pos][4] = '#00bbbb';
 
             data[pos][1] = 1 - commonAttr/totalAttr
 

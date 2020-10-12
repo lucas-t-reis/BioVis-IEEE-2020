@@ -87,6 +87,11 @@
             <div id="chart-container" style="width: 100wp">
                 <svg class="polar-chart" width="750" height="625"></svg>
                 <div id="legend">
+                    <div id="select-box">
+                        <label for="refPerson">Choose a person</label>
+                        <select id="refPerson" onchange="updateGraph()"></select>
+                    </div>
+                    <br>
                     <div>
                         Destacar atributo: 
                         <select id="attrSelect" onchange="changeAttr()">
