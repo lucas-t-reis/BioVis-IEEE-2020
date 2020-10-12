@@ -21,18 +21,28 @@ var tenFamilies = ["38", "149","27251", "42623",
 d3.csv("../../dataset/filtered_data.csv", function(data) { 
 	buildSelect(data)
 })
+
 function buildSelect(data) {
 	
 	var select = document.getElementById("refPerson")
 	var i = 0
-	for(const person of data) {
+	
+	var sorted = []
+
+	for(const person of data) 
+		sorted.push(person.personid);
+	
+	sorted.sort((a, b) => {return a - b;})
+
+	for(var i = 0; i < sorted.length; i++) {
 		let option = document.createElement("option");
-		option.text = person.personid
+		option.text = sorted[i];
 		select.add(option, select[i])
 		i++
 	}
 
 }
+
 function updateGraph() {
 	
 	d3.select("#heatmap").html("")
