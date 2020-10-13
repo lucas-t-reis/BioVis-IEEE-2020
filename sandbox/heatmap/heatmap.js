@@ -24,29 +24,35 @@ d3.csv("../../dataset/filtered_data.csv", function(data) {
 
 function buildSelect(data) {
 	
-	var select = document.getElementById("refPerson")
-	var i = 0
-	
 	var sorted = []
-
-	for(const person of data) 
-		sorted.push(person.personid);
+    
+	for(var i = 0; i < data.length; i++) 
+		sorted.push(data[i].personid);
 	
-	sorted.sort((a, b) => {return a - b;})
+	sorted.sort(function(a, b){
+		return a - b;
+	})
 
-	for(var i = 0; i < sorted.length; i++) {
-		let option = document.createElement("option");
-		option.text = sorted[i];
-		select.add(option, select[i])
-		i++
-	}
+	for(var i = 0; i < sorted.length; i++)
+		d3.select("#refPerson").append('option').html(sorted[i]).attr('value', sorted[i])
 
+	url = new URL(window.location.href)
+	urlId = url.searchParams.get('id')
+
+	if(urlId == null)
+		urlId = 11605;
+	
+	d3.select('#refPerson').property('value', urlId)
+	d3.select('#polar-link').attr('href', '../polar/?id=' + urlId)
+
+	buildGraph(urlId)
 }
 
 function updateGraph() {
 	
 	d3.select("#heatmap").html("")
 	refPerson = d3.select("#refPerson").property("value")
+	d3.select('#polar-link').attr('href', '../polar/?id=' + refPerson)
 	buildGraph(refPerson)
 
 }
@@ -162,9 +168,9 @@ function buildGraph(pid) {
 
 			tooltip
 				.html(
-				"<br>Family: "+ d.KindredID
-				+ "<p>Common attributes: " + rank.get(d.personid)	
-				+ "<p><p>" + commonAttr
+				'<br><p>Family: '+ d.KindredID + '</p>'
+				+ '<p>Common attributes: ' + rank.get(d.personid) + '</p>' 	
+				+ '<p></p>' + commonAttr
 				)
 				.style("left", (d3.mouse(this)[0] + 620) + "px")
 				.style("top", (d3.mouse(this)[1] + 10) +"px")

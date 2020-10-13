@@ -73,7 +73,7 @@ function buildSuicideChart(){
     var svg = div.append("svg")
         .attr("height", height)
         .attr("width", width)
-        .attr("transform", "translate(" + 200 + "," + 30 + ")");
+        //.attr("transform", "translate(" + 200 + "," + 30 + ")");
 
     svg.append("text")
         .attr("x", width/2)
@@ -138,7 +138,7 @@ function buildAttrChart(col){
     var svg = div.append("svg")
         .attr("height", height)
         .attr("width", width)
-        .attr("transform", "translate(" + 200 + "," + 30 + ")");
+        //.attr("transform", "translate(" + 200 + "," + 30 + ")");
 
     svg.append("text")
         .attr("x", width/2)

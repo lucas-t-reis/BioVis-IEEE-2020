@@ -29,12 +29,12 @@
             pointer-events: none;
             z-index: 1001;
         }
-        #main-chart{
+        #header{
             position: sticky; 
             top: 0;
             z-index: 999;
             background-color: white;
-            height: 300px;
+            height: 310px;
         }
         #attr-charts svg{
             margin-bottom: 20px;
@@ -53,13 +53,14 @@
 </head>
 
 	<body>
-        <div id="select-box">
-            <select id='mainAttr' onchange="updateAttr()"></select>
+        <div id="header">
+            <div id="select-box">
+                <select id='mainAttr' onchange="updateAttr()"></select>
+            </div>
+            <br>
+            <div id="main-chart" style="text-align: center;"></div>
         </div>
-        <div id="charts">
-            <div id="main-chart"></div>
-            <div id="attr-charts"></div>
-        </div>
+        <div id="attr-charts" style="text-align: center;"></div>
     </body>
 
 </html>

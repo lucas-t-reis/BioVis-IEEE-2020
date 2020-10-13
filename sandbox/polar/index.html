@@ -46,20 +46,15 @@
             stroke-width: 3px;
         }
 
-        #legend ul{
-            padding: 0;
-            list-style-type: none;
-        }
-
         li{
             text-anchor: left;
         }
 
         #legend{
+            display: inline-block;
             width: 300px;
-            position: absolute;
-            left: 900px;
-            top: 120px;
+            vertical-align: middle;
+            margin-top: 10%;
         }
 
         .legend-label{
@@ -69,13 +64,13 @@
 
         #tooltip{
             width: 300px;
-            position: absolute;
-            left:900px;
-            top:280px;
             border: #000 solid 2px;
             visibility: hidden;
         }
     </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     <script src="https://d3js.org/d3.v5.min.js"></script>
     
 	<title>D3 sandbox</title>
@@ -84,49 +79,34 @@
 
 	<body>
         <div id="wrapper">
-            <div id="chart-container" style="width: 100wp">
+            <div id="chart-container">
+                <div id="swap-btn" class='text-center'>
+                    <a href="#" class='btn btn-outline-dark'>Polar</a>
+                    <a id="heatmap-link" href="../heatmap/" class="btn btn-dark">Heatmap</a>
+                </div>    
                 <svg class="polar-chart" width="750" height="625"></svg>
-                <div id="legend">
-                    <div id="select-box">
-                        <label for="refPerson">Choose a person</label>
-                        <select id="refPerson" onchange="updateGraph()"></select>
-                    </div>
-                    <br>
-                    <div>
-                        Destacar atributo: 
-                        <select id="attrSelect" onchange="changeAttr()">
-                            <option value="none">Nenhum</option>
-                        </select>
-                    </div>
-                    <br>
-                    <div>
-                        Mínimo de Similaridade: 
-                        <input id="limitInput" type="number" min="0" max="100" value="0" onchange="changeLimit()"> %
-                    </div>
-                    <br>
-                        <!-- <ul>
-                        <li> 
-                            <svg class="legend-label" width="40" height="20">
-                                <rect width="40" height="20" style="fill:rgb(255,0,0);stroke-width:3;stroke:rgb(0,0,0)">
-                            </svg>
-                            Pessoas de famílias diferentes 
-                        </li>
-                        <li> 
-                            <svg class="legend-label" width="40" height="20">
-                                <rect width="40" height="20" style="fill:rgb(0,211,211);stroke-width:3;stroke:rgb(0,0,0)">
-                            </svg>
-                            Pessoas da mesma família
-                        </li>
-                        <li> 
-                            <svg class="legend-label" width="40" height="20">
-                                <rect width="40" height="20" style="fill:rgb(238,238,0);stroke-width:3;stroke:rgb(0,0,0)">
-                            </svg>
-                            Pessoa Analisada
-                        </li>
-                    </ul> -->
-                    Clique nos pontos para obter mais detalhes
+            </div>
+            <div id="legend">
+                <div id="select-box">
+                    <label for="refPerson">Choose a person</label>
+                    <select id="refPerson" onchange="updateGraph()"></select>
                 </div>
+                <br>
+                <div>
+                    Destacar atributo: 
+                    <select id="attrSelect" onchange="changeAttr()">
+                        <option value="none">Nenhum</option>
+                    </select>
+                </div>
+                <br>
+                <div>
+                    Mínimo de Similaridade: 
+                    <input id="limitInput" type="number" min="0" max="100" value="0" onchange="changeLimit()"> %
+                </div>
+                <br>
+                Clique nos pontos para obter mais detalhes
                 <div id="tooltip"></div>
+            </div>
         </div>
         <script src="./polar.js"></script>
     </body>

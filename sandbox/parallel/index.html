@@ -6,6 +6,7 @@
 		<script src="https://d3js.org/d3.v4.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 		<link rel="stylesheet" href="parallel.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	</head>
 
 	<body>
@@ -22,7 +23,14 @@
 				<p onmouseover="highlightHtml('38')" onmouseleave="noHighlightHtml('38')" id="38" style="color:#7f7f7f"><b>38</b></p>
 				<p onmouseover="highlightHtml('42623')" onmouseleave="noHighlightHtml('42623')" id="42623" style="color:#bcbd22"><b>42623</b></p>
 			</div>
-			<div id="parallel"></div>
+			<div id="parallel">
+				<div id="swap-btn" class='text-center'>
+					<a href="../table-lens/" class='btn btn-dark'>Table Lens</a>
+					<a href="#" class="btn btn-outline-dark">Parallel</a>
+					<a href="../treemap/" class="btn btn-dark">Treemap</a>
+				</div>
+				<br>
+			</div>
 		</div>
 		<script src="parallel.js"></script>
 	</body>

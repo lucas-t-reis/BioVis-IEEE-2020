@@ -42,14 +42,27 @@
         svg{
             border: 1px #000 solid
         }
-	</style>
+        #wrapper {
+            justify-content: center;
+        }
+    </style>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 </head>
 
 	<body>
-        <div id="suicides-chart"></div>
-        <div id="attr-charts"></div>
-	</body>
+        <div id="wrapper">
+            <div id="swap-btn" class='text-center'>
+                <a href="#" class='btn btn-outline-dark'>Table Lens</a>
+                <a href="../parallel/" class="btn btn-dark">Parallel</a>
+                <a href="../treemap/" class="btn btn-dark">Treemap</a>
+            </div>
+            <br>
+            <div id="suicides-chart" class="text-center"></div>
+            <div id="attr-charts" class="text-center"></div>
+        </div>
+    </body>
 
 </html>
 

@@ -1,36 +1,44 @@
 var globalData
 var numCircles = 5
+var url, urlId
 
 getPeople()
 
 function getPeople(){
     d3.csv("../../dataset/filtered_data.csv").then(function(rows){
         
-        var select = document.getElementById("refPerson")
-        var i = 0
-        
         var sorted = []
     
-        for(const person of rows) 
-            sorted.push(person.personid);
+        for(var i = 0; i < rows.length; i++) 
+            sorted.push(rows[i].personid);
         
-        sorted.sort((a, b) => {return a - b;})
+        sorted.sort(function(a, b){
+            return a - b;
+        })
     
-        for(var i = 0; i < sorted.length; i++) {
-            let option = document.createElement("option");
-            option.text = sorted[i];
-            select.add(option, select[i])
-            i++
-        }
-        
-        d3.select('#refPerson').property('value', 11605)
+        for(var i = 0; i < sorted.length; i++)
+            d3.select("#refPerson").append('option').html(sorted[i]).attr('value', sorted[i])
 
-        processData(11605, 0)
+        url = new URL(window.location.href)
+        urlId = url.searchParams.get('id')
+
+        console.log(rows.length)
+        console.log(sorted.length)
+
+        if(urlId == null)
+            urlId = 11605;
+        
+        d3.select('#refPerson').property('value', urlId)
+        d3.select('#heatmap-link').attr('href', '../heatmap/?id=' + urlId)
+
+        processData(urlId, 0)
     });    
 }
 
 function updateGraph(){
     d3.select('.polar-chart').html("");
+    d3.select("#attrSelect").selectAll("option").remove()
+    d3.select("#attrSelect").append("option").html("Nenhum").attr("value", "none");
     processData(d3.select('#refPerson').property('value'))
 }
 
@@ -283,9 +291,10 @@ function drawChart(data){
 
         tip.append('div')
         .style('text-align', 'center')
-        .append('a')
-        .html('Analisar essa pessoa')
-        .attr('href', url.pathname + '?id=' + d[3] + '&limit=' + urlLimit)
+        .append('p')
+        .html('Analisar essa pessoa?')
+        .style('text-decoration', 'underline')
+        .attr('onclick', 'window.location = \'' + url.pathname + '?id=' + d[3] + '\'')
     });
   
 //   // adding labels
