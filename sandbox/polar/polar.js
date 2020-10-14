@@ -36,10 +36,15 @@ function getPeople(){
 }
 
 function updateGraph(){
+    
     d3.select('.polar-chart').html("");
     d3.select("#attrSelect").selectAll("option").remove()
     d3.select("#attrSelect").append("option").html("Nenhum").attr("value", "none");
-    processData(d3.select('#refPerson').property('value'))
+    
+    var val = d3.select('#refPerson').property('value')
+    
+    d3.select('#heatmap-link').attr('href', '../heatmap/?id=' + val)
+    processData(val, 0)
 }
 
 function processData(id, limit){
@@ -62,7 +67,7 @@ function processData(id, limit){
             for(var j in columns){
                 if(columns[j] == 'suicide' || columns[j] == 'Age')
                     continue
-                else if(columns[j] == 'personid' || columns[j] == 'sex'){
+                else if(columns[j] == 'personid' || columns[j] == 'KindredID' || columns[j] == 'sex'){
                     if(rows[i][columns[j]] == person[columns[j]]){
                         commonAttr++;
                         data[pos][5].push(columns[j]);
