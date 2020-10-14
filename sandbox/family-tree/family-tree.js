@@ -31,7 +31,7 @@ function getPeople(){
         
         d3.select('#refPerson').property('value', 42257)
 
-        processData(42257, 0)
+        processRelatives(42257)
     });    
 }
 
