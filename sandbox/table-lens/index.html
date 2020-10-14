@@ -14,13 +14,13 @@
         .blue-bar{
 			fill: #3399ff;
 		}
-        .tooltip{
+        #tooltip{
             position      : absolute;
             text-align    : center;
             max-width     : 100px;
             max-height    : 30px;
             padding       : 8px;
-            border        : none;
+            border        : 1px solid #000;
             border-radius : 8px;
             margin-top    : -30px;
             font          : 10px sans-serif;
@@ -35,6 +35,9 @@
             z-index: 999;
             background-color: white;
             height: 300px;
+        }
+        #attr-charts{
+            z-index:998;
         }
         #attr-charts svg{
             margin-bottom: 20px;

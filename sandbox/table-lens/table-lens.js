@@ -25,7 +25,7 @@ function processSuicides(){
             total[rows[i].KindredID]++
         }
 
-        tooltip = d3.select('body').append('div').attr('class', 'tooltip')
+        tooltip = d3.select('body').append('div').attr('id', 'tooltip')
 
         processAttr()
     });
