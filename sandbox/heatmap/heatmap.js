@@ -172,7 +172,7 @@ function buildGraph(pid) {
 				+ '<p>Common attributes: ' + rank.get(d.personid) + '</p>' 	
 				+ '<p></p>' + commonAttr
 				)
-				.style("left", (d3.mouse(this)[0] + 620) + "px")
+				.style("left", (d3.mouse(this)[0] + 500) + "px")
 				.style("top", (d3.mouse(this)[1] + 10) +"px")
 				.style("opacity", 1)
 		}
